@@ -14,16 +14,16 @@ pipeline {
             }
         }
 
-        stage('Publish Website') {
+        stage('Run Website') {
             steps {
-                // Publish static HTML from the repo
-                publishHTML(target: [
-                    reportDir: '.',            // folder where HTML files are located
-                    reportFiles: 'index.html', // main HTML file
-                    reportName: 'My Static Site',
-                    keepAll: true,
-                    allowMissing: false
-                ])
+                echo 'Starting local web server on port 8085...'
+                
+                // Run Python HTTP server in background using PowerShell
+                powershell """
+                Start-Process powershell -ArgumentList '-NoExit', '-Command', 'python -m http.server 8085' -WindowStyle Hidden
+                """
+                
+                echo 'Server started! Access at http://localhost:8085'
             }
         }
     }
