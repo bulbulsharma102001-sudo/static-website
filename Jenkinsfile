@@ -14,16 +14,20 @@ pipeline {
             }
         }
 
-        stage('Run Website') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Starting local web server on port 8085...'
-                
-                // Run Python HTTP server in background using PowerShell
-                powershell """
-                Start-Process powershell -ArgumentList '-NoExit', '-Command', 'python -m http.server 8085' -WindowStyle Hidden
-                """
-                
-                echo 'Server started! Access at http://localhost:8085'
+                script {
+                    docker.build("static-website:latest")
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    docker.image("static-website:latest").run("-d -p 8085:80")
+                    echo 'Docker container running at http://localhost:8085'
+                }
             }
         }
     }
