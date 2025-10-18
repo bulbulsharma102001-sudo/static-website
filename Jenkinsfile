@@ -18,7 +18,7 @@ pipeline {
       steps {
         echo 'Starting local web server...'
         // simple python server for local run
-        bat 'python -m http.server 8081'
+        bat 'python -m http.server 8085'
       }
     }
   }
