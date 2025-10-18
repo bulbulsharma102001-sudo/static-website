@@ -10,15 +10,20 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Static website hai — build ki zarurat nahi.'
+                echo 'Static website — build not required.'
             }
         }
 
-        stage('Run Website') {
+        stage('Publish Website') {
             steps {
-                echo 'Starting local web server...'
-                bat 'start python -m http.server 8085'
-                bat 'start http://localhost:8085'
+                // Publish static HTML from the repo
+                publishHTML(target: [
+                    reportDir: '.',            // folder where HTML files are located
+                    reportFiles: 'index.html', // main HTML file
+                    reportName: 'My Static Site',
+                    keepAll: true,
+                    allowMissing: false
+                ])
             }
         }
     }
