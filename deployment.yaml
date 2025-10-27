@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-website
+  labels:
+    app: static-website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-website
+  template:
+    metadata:
+      labels:
+        app: static-website
+    spec:
+      containers:
+      - name: static-website
+        image: bulbulsharma102001/static-website:latest   # <-- Change this if your DockerHub username is different
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: static-website-service
+  labels:
+    app: static-website
+spec:
+  selector:
+    app: static-website
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
